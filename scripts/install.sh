@@ -184,6 +184,14 @@ esac
 
 cat <<EOF
 
-Done. Quit and reopen Claude Code (in the desktop app, use Cmd+Q) to load the plugin.
-To update the plugin, change the profile or change your key, run this script again.
+Done. deepseek-worker is installed with the $name profile.
+
+Next, restart Claude Code so it loads the plugin:
+  - Desktop app: quit with Cmd+Q and reopen it.
+  - Terminal: start a new claude session.
+  - VS Code or JetBrains: reload the window.
+
+Later:
+  - To update, run git pull, then ./scripts/install.sh again.
+  - To change your key or profile, run ./scripts/install.sh again.
 EOF

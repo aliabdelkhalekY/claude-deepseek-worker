@@ -87,7 +87,9 @@ The script:
    already there;
 5. checks that the MCP server starts.
 
-Then quit and reopen Claude Code. In the desktop app, use Cmd+Q.
+Then restart Claude Code so it loads the plugin. In the desktop app, quit with
+Cmd+Q and reopen it. In a terminal, start a new `claude` session. In VS Code or
+JetBrains, reload the window.
 
 Run the script again at any time to update the plugin after `git pull`, to
 change the profile or to change your key. To run it with no prompts, set
