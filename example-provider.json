@@ -1,0 +1,10 @@
+{
+  "name": "Example gateway",
+  "base_url": "https://gateway.example.com/anthropic",
+  "model": "deepseek-chat",
+  "context_tokens": 128000,
+  "max_output_tokens": 32768,
+  "requests_per_minute": 50,
+  "session_header": "",
+  "help": ""
+}

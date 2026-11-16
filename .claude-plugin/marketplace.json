@@ -1,0 +1,13 @@
+{
+  "name": "deepseek-worker",
+  "owner": {
+    "name": "deepseek-worker contributors"
+  },
+  "plugins": [
+    {
+      "name": "deepseek-worker",
+      "source": "./",
+      "description": "Lets Claude Code hand simple tasks to a DeepSeek model on your own Anthropic-compatible gateway."
+    }
+  ]
+}

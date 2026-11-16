@@ -1,0 +1,62 @@
+{
+  "name": "deepseek-worker",
+  "version": "0.1.0",
+  "description": "Lets Claude Code hand simple tasks to a DeepSeek model on your own Anthropic-compatible gateway.",
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "Gateway key",
+      "description": "Your key for the gateway.",
+      "required": true,
+      "sensitive": true
+    },
+    "base_url": {
+      "type": "string",
+      "title": "Gateway URL",
+      "description": "Base URL of an Anthropic-compatible Messages API, without /v1/messages.",
+      "default": ""
+    },
+    "model": {
+      "type": "string",
+      "title": "Model",
+      "description": "Model name as the gateway knows it.",
+      "default": ""
+    },
+    "session_id": {
+      "type": "string",
+      "title": "Session id",
+      "description": "Optional. Sent in the session header, if the profile names one. Use your username.",
+      "default": ""
+    },
+    "session_header": {
+      "type": "string",
+      "title": "Session header",
+      "description": "Optional. Header the gateway uses to keep your requests on one engine.",
+      "default": ""
+    },
+    "help": {
+      "type": "string",
+      "title": "Help text",
+      "description": "Optional. Added to key and rate-limit errors, such as where to ask for help.",
+      "default": ""
+    },
+    "context_tokens": {
+      "type": "string",
+      "title": "Context tokens",
+      "description": "Optional. The model's context window.",
+      "default": ""
+    },
+    "max_output_tokens": {
+      "type": "string",
+      "title": "Max output tokens",
+      "description": "Optional. Output tokens per request.",
+      "default": ""
+    },
+    "requests_per_minute": {
+      "type": "string",
+      "title": "Requests per minute",
+      "description": "Optional. Rate limit this plugin keeps to.",
+      "default": ""
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "deepseek-worker": {
+      "command": "python3",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/server.py"
+      ],
+      "env": {
+        "DEEPSEEK_WORKER_API_KEY": "${user_config.api_key}",
+        "DEEPSEEK_WORKER_BASE_URL": "${user_config.base_url}",
+        "DEEPSEEK_WORKER_MODEL": "${user_config.model}",
+        "DEEPSEEK_WORKER_SESSION_ID": "${user_config.session_id}",
+        "DEEPSEEK_WORKER_SESSION_HEADER": "${user_config.session_header}",
+        "DEEPSEEK_WORKER_HELP": "${user_config.help}",
+        "DEEPSEEK_WORKER_CONTEXT_TOKENS": "${user_config.context_tokens}",
+        "DEEPSEEK_WORKER_MAX_OUTPUT_TOKENS": "${user_config.max_output_tokens}",
+        "DEEPSEEK_WORKER_REQUESTS_PER_MINUTE": "${user_config.requests_per_minute}"
+      }
+    }
+  }
+}
