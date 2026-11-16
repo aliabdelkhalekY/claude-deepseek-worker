@@ -57,6 +57,21 @@ class ServerProcessTest(unittest.TestCase):
         self.assertEqual(replies[None]["error"]["code"], -32700)
 
 
+    def test_reads_utf8_even_when_the_system_encoding_is_not(self):
+        # Windows pipes default to a code page such as cp1252, where the byte 0x81 in "ā" is undefined.
+        name = "outil-ā-عربي"
+        stdin = json.dumps(request(1, "tools/call", {"name": name, "arguments": {}}), ensure_ascii=False) + "\n"
+        env = {key: value for key, value in os.environ.items() if not key.startswith("DEEPSEEK_WORKER_")}
+        env["PYTHONIOENCODING"] = "cp1252"
+        env.pop("PYTHONUTF8", None)
+        completed = subprocess.run([sys.executable, str(REPO / "server.py")], input=stdin.encode("utf-8"),
+                                   capture_output=True, env=env, timeout=30)
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode(errors="replace"))
+        self.assertNotIn(b"\r\n", completed.stdout)
+        reply = json.loads(completed.stdout.decode("utf-8"))
+        self.assertIn(name, reply["result"]["content"][0]["text"])
+
+
 class ServerToolsTest(unittest.TestCase):
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()

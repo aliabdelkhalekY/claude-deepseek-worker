@@ -196,6 +196,10 @@ def main():
     except ValueError as error:
         print(f"deepseek-worker: {error}", file=sys.stderr)
         return 1
+    # Claude Code speaks UTF-8 with \n line endings. Windows would otherwise use its own
+    # code page and \r\n.
+    sys.stdin.reconfigure(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8", newline="\n")
     server = Server(config, Gateway(config), DelegationLog(config.log_path), sys.stdout)
     server.serve(sys.stdin)
     return 0

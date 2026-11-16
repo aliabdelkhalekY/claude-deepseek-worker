@@ -38,13 +38,22 @@ fi
 
 step "Checking requirements"
 command -v claude >/dev/null || fail "the Claude Code CLI (claude) is not installed."
-command -v python3 >/dev/null || fail "python3 is not installed."
-python3 -c 'import sys; sys.exit(sys.version_info < (3, 9))' || fail "python3 must be 3.9 or later."
-echo "claude $(claude --version 2>/dev/null | head -n 1), $(python3 --version)"
+# Use the first Python 3.9+ that really runs. On Windows, python3 is often a shortcut
+# that only opens the Microsoft Store, and Python is python or py instead.
+python=""
+for candidate in python3 python py; do
+  if command -v "$candidate" >/dev/null 2>&1 &&
+     "$candidate" -c 'import sys; sys.exit(sys.version_info < (3, 9))' >/dev/null 2>&1; then
+    python="$candidate"
+    break
+  fi
+done
+[ -n "$python" ] || fail "Python 3.9 or later is not installed. Get it from python.org (on Windows, tick 'Add python.exe to PATH')."
+echo "claude $(claude --version 2>/dev/null | head -n 1), $("$python" --version) ($python)"
 
 step "Reading the profile"
 # Prints one plugin setting per line, as name=value. Fails with a message if the profile is wrong.
-settings_text="$(python3 - "$profile" <<'EOF'
+settings_text="$("$python" - "$profile" <<'EOF'
 import json, sys
 
 TEXT = ("base_url", "model", "session_header", "help")
@@ -132,7 +141,7 @@ fi
 step "Checking the key with the gateway"
 # The key goes to Python through the environment, never on a command line.
 set +e
-DEEPSEEK_WORKER_API_KEY="$key" python3 - "$base_url" "$model" <<'EOF'
+DEEPSEEK_WORKER_API_KEY="$key" "$python" - "$base_url" "$model" <<'EOF'
 import json, os, sys, urllib.error, urllib.request
 
 base_url, model = sys.argv[1].rstrip("/"), sys.argv[2]
@@ -173,7 +182,8 @@ fi
 # The CLI takes the key as an argument. It is visible to other processes on
 # this machine only while this command runs. Claude Code stores it in its
 # secure credential store, not in a plain file.
-claude plugin install "$PLUGIN" --config "api_key=$key" --config "session_id=$session_id" "${settings[@]}"
+claude plugin install "$PLUGIN" --config "api_key=$key" --config "session_id=$session_id" \
+  --config "python=$python" "${settings[@]}"
 
 step "Checking that the MCP server starts"
 status="$(claude mcp list 2>/dev/null | grep "plugin:deepseek-worker" || true)"

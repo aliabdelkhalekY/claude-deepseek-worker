@@ -57,6 +57,12 @@
       "title": "Requests per minute",
       "description": "Optional. Rate limit this plugin keeps to.",
       "default": ""
+    },
+    "python": {
+      "type": "string",
+      "title": "Python command",
+      "description": "The command that runs Python 3.9 or later on this machine, such as python3, python or py. The installer finds it.",
+      "default": "python3"
     }
   }
 }

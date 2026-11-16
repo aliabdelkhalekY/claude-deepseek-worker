@@ -42,6 +42,16 @@ class SandboxTest(unittest.TestCase):
             with self.assertRaisesRegex(SandboxError, "secrets"):
                 self.sandbox.read_file(path)
 
+    def test_git_and_secret_checks_ignore_case(self):
+        # macOS and Windows ignore case in file names, so .ENV is the same file as .env.
+        write_files(self.root, {"sub/.ENV": "SECRET=1\n", "keys/Server.PEM": "secret\n"})
+        with self.assertRaisesRegex(SandboxError, ".git"):
+            self.sandbox.read_file(".GIT/config")
+        for path in ("sub/.ENV", "keys/Server.PEM"):
+            with self.assertRaisesRegex(SandboxError, "secrets"):
+                self.sandbox.read_file(path)
+        self.assertNotIn("Server.PEM", self.sandbox.list_files())
+
     def test_output_path_cannot_be_a_secret_or_outside(self):
         with self.assertRaises(SandboxError):
             Sandbox(self.root, ".env")

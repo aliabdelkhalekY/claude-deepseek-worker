@@ -23,8 +23,8 @@ serves the Anthropic Messages API (`POST /v1/messages`) works.
 - **Log**: one JSON line per delegation and per outcome, at
   `~/.local/state/deepseek-worker/delegations.jsonl`. It stays on your machine.
 
-It uses only the Python standard library and runs on the system `python3`
-(3.9 or later). There is nothing to install.
+It uses only the Python standard library and runs on Python 3.9 or later.
+There is nothing to install.
 
 ## How it treats the gateway
 
@@ -63,7 +63,7 @@ repository root without being committed.
 
 ## Install
 
-You need the Claude Code CLI (`claude`), `python3` 3.9 or later, a provider
+You need the Claude Code CLI (`claude`), Python 3.9 or later, a provider
 profile and your key for that gateway.
 
 1. Clone this repository.
@@ -98,6 +98,25 @@ change the profile or to change your key. To run it with no prompts, set
 Your key is kept in Claude Code's secure credential store, not in a plain file
 or in this repository. The plugin does not change which model Claude Code
 itself uses.
+
+### macOS and Linux
+
+Run the script from Terminal. macOS ships `python3`. If it has not been used
+before, the first run may ask to install the Command Line Tools; accept, then
+run the script again.
+
+### Windows
+
+Run the script from Git Bash, which comes with Git for Windows (Claude Code
+needs it too), or from WSL. It does not run in PowerShell or cmd.
+
+The script uses the first of `python3`, `python` and `py` that runs Python 3.9
+or later, and the plugin starts its server with the same one. On Windows,
+`python3` is often only a shortcut that opens the Microsoft Store, so it is
+skipped. If no Python is found, install it from python.org and tick "Add
+python.exe to PATH".
+
+Windows support is checked by tests on macOS only, not yet on a Windows machine.
 
 ## Other settings
 

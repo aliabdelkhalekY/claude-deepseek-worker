@@ -25,7 +25,8 @@ class SandboxError(Exception):
 
 
 def _is_secret(name):
-    return any(fnmatch.fnmatch(name, pattern) for pattern in SECRET_PATTERNS)
+    # Case does not matter: on macOS and Windows, .ENV is the same file as .env.
+    return any(fnmatch.fnmatchcase(name.lower(), pattern) for pattern in SECRET_PATTERNS)
 
 
 class Sandbox:
@@ -44,7 +45,7 @@ class Sandbox:
             relative = candidate.relative_to(self.root)
         except ValueError:
             raise SandboxError(f"{path} is outside the project.") from None
-        if ".git" in relative.parts:
+        if ".git" in (part.lower() for part in relative.parts):
             raise SandboxError(f"{path} is inside .git, which the worker cannot use.")
         if _is_secret(relative.name):
             raise SandboxError(f"{path} may hold secrets, so the worker cannot use it.")
@@ -55,7 +56,7 @@ class Sandbox:
 
     def _walk(self):
         for dirpath, dirnames, filenames in os.walk(self.root):
-            dirnames[:] = sorted(d for d in dirnames if d not in SKIPPED_DIRS)
+            dirnames[:] = sorted(d for d in dirnames if d.lower() not in SKIPPED_DIRS)
             for name in sorted(filenames):
                 if not _is_secret(name):
                     yield Path(os.path.relpath(os.path.join(dirpath, name), self.root)).as_posix()
