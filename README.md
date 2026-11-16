@@ -118,6 +118,33 @@ python.exe to PATH".
 
 Windows support is checked by tests on macOS only, not yet on a Windows machine.
 
+## Choosing what goes to DeepSeek
+
+The skill in
+[skills/delegate-to-deepseek/SKILL.md](skills/delegate-to-deepseek/SKILL.md)
+decides what Claude hands to DeepSeek and what it keeps. You can change that in
+two ways.
+
+**Add your own rules to CLAUDE.md (recommended).** Claude follows your
+instructions over the skill's defaults, and nothing in this repository changes,
+so `git pull` stays clean. Put the rules in `~/.claude/CLAUDE.md` for all your
+projects, or in a project's `CLAUDE.md` for that project only. For example:
+
+```markdown
+## DeepSeek worker
+- Never delegate anything in the payments/ folder. Read it yourself.
+- Always delegate writing unit tests for existing code. I review them.
+- Do not delegate PR descriptions; write them yourself.
+```
+
+**Edit the skill itself.** Change the "Delegate" and "Keep it yourself" lists
+in `SKILL.md`, then run `./scripts/install.sh` again. Claude Code runs its own
+copy of the plugin, so edits do nothing until you reinstall. Your edits are
+local changes, so `git pull` may ask you to commit or stash them first. If a
+change would help everyone, open a pull request.
+
+Either way, restart Claude Code afterwards.
+
 ## Other settings
 
 All optional. They are read from the environment that Claude Code starts the
